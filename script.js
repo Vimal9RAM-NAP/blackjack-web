@@ -165,7 +165,8 @@ function renderHand(hand, elementId, hideFirstCard = false) {
 
   hand.forEach((card, index) => {
     const cardDiv = document.createElement('div');
-    cardDiv.classList.add('card');
+    cardDiv.classList.add('card', 'draw-anim'); // Added 'draw-anim' class
+    
     if (hideFirstCard && index === 0) {
       cardDiv.classList.add('hidden');
       cardDiv.textContent = '?';
@@ -175,6 +176,7 @@ function renderHand(hand, elementId, hideFirstCard = false) {
       }
       cardDiv.textContent = `${card.rank}${card.suit}`;
     }
+    
     container.appendChild(cardDiv);
   });
 }
