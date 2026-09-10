@@ -13,7 +13,7 @@ let isSplit = false;
 let activeHandIndex = 0;
 let gameOver = false;
 let currentTitle = "Rookie";
-let audioCtx = null; // Lazy initialization on first click
+let audioCtx = null;
 
 const MILESTONES = [
   { threshold: 100000, title: "Luck Is My Name" },
@@ -25,11 +25,15 @@ const MILESTONES = [
 
 // --- SOUND SYNTHESIZER ---
 function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  } catch (e) {
+    console.warn("Audio Context setup prevented by browser:", e);
   }
 }
 
@@ -79,35 +83,49 @@ function playSound(type) {
 
 // --- LOCAL STORAGE MANAGER ---
 function loadGameState() {
-  const savedChips = localStorage.getItem('bj_chips');
-  const savedHigh = localStorage.getItem('bj_highest');
-  const savedTitle = localStorage.getItem('bj_title');
+  try {
+    const savedChips = localStorage.getItem('bj_chips');
+    const savedHigh = localStorage.getItem('bj_highest');
+    const savedTitle = localStorage.getItem('bj_title');
 
-  if (savedChips !== null) chips = parseInt(savedChips);
-  if (savedHigh !== null) highestBankroll = parseInt(savedHigh);
-  if (savedTitle !== null) currentTitle = savedTitle;
+    if (savedChips !== null && !isNaN(parseInt(savedChips))) chips = parseInt(savedChips);
+    if (savedHigh !== null && !isNaN(parseInt(savedHigh))) highestBankroll = parseInt(savedHigh);
+    if (savedTitle !== null) currentTitle = savedTitle;
+  } catch (e) {
+    console.warn("Storage read failed, using defaults:", e);
+  }
 
-  document.getElementById('chips').textContent = chips;
-  document.getElementById('player-title').textContent = currentTitle;
+  const chipsEl = document.getElementById('chips');
+  const titleEl = document.getElementById('player-title');
+
+  if (chipsEl) chipsEl.textContent = chips;
+  if (titleEl) titleEl.textContent = currentTitle;
 }
 
 function saveGameState() {
-  localStorage.setItem('bj_chips', chips);
-  localStorage.setItem('bj_highest', highestBankroll);
-  localStorage.setItem('bj_title', currentTitle);
+  try {
+    localStorage.setItem('bj_chips', chips);
+    localStorage.setItem('bj_highest', highestBankroll);
+    localStorage.setItem('bj_title', currentTitle);
+  } catch (e) {
+    console.warn("Storage write failed:", e);
+  }
 }
 
 // --- START GAME ACTION ---
 function enterGame(event) {
   if (event) event.preventDefault();
 
-  initAudio(); // Safely start audio on user gesture
-
+  // 1. Hide modal immediately
   const startScreen = document.getElementById('start-screen');
   if (startScreen) {
     startScreen.style.display = 'none';
   }
 
+  // 2. Initialize sound safely
+  initAudio();
+
+  // 3. Load saved state & milestones
   loadGameState();
   checkMilestones();
 }
@@ -132,7 +150,9 @@ function checkMilestones() {
     playSound('unlock');
   }
 
-  document.getElementById('player-title').textContent = currentTitle;
+  const titleEl = document.getElementById('player-title');
+  if (titleEl) titleEl.textContent = currentTitle;
+
   saveGameState();
   return upgraded;
 }
@@ -172,6 +192,7 @@ function calculateScore(hand) {
 
 function renderHand(hand, elementId, hideFirstCard = false) {
   const container = document.getElementById(elementId);
+  if (!container) return;
   container.innerHTML = '';
 
   hand.forEach((card, index) => {
@@ -385,3 +406,11 @@ function endGame(message) {
   document.getElementById('betting-controls').style.display = 'block';
   document.getElementById('game-controls').style.display = 'none';
 }
+
+// Fallback listener attachment on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const startBtn = document.querySelector('#start-screen button');
+  if (startBtn) {
+    startBtn.addEventListener('click', enterGame);
+  }
+});
