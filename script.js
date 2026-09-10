@@ -13,6 +13,7 @@ let isSplit = false;
 let activeHandIndex = 0;
 let gameOver = false;
 let currentTitle = "Rookie";
+let audioCtx = null; // Lazy initialization on first click
 
 const MILESTONES = [
   { threshold: 100000, title: "Luck Is My Name" },
@@ -22,13 +23,18 @@ const MILESTONES = [
   { threshold: 5000, title: "Jack of All Trades" }
 ];
 
-// --- SOUND SYNTHESIZER (Web Audio API) ---
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playSound(type) {
+// --- SOUND SYNTHESIZER ---
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
   if (audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
+}
+
+function playSound(type) {
+  if (!audioCtx) return;
 
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
@@ -38,7 +44,6 @@ function playSound(type) {
   const now = audioCtx.currentTime;
 
   if (type === 'card') {
-    // Card slide sound (short noise click)
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(300, now);
     osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
@@ -47,7 +52,6 @@ function playSound(type) {
     osc.start(now);
     osc.stop(now + 0.08);
   } else if (type === 'chip') {
-    // Chip clink sound (high pitch click)
     osc.type = 'sine';
     osc.frequency.setValueAtTime(1200, now);
     osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
@@ -56,8 +60,7 @@ function playSound(type) {
     osc.start(now);
     osc.stop(now + 0.05);
   } else if (type === 'unlock') {
-    // Fanfare chime
-    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    const notes = [523.25, 659.25, 783.99, 1046.50];
     notes.forEach((freq, index) => {
       const noteOsc = audioCtx.createOscillator();
       const noteGain = audioCtx.createGain();
@@ -94,23 +97,17 @@ function saveGameState() {
   localStorage.setItem('bj_title', currentTitle);
 }
 
-// --- GAME LOGIC ---
+// --- START GAME ACTION ---
 function enterGame(event) {
-  // Prevent any default touch/click delays
   if (event) event.preventDefault();
 
-  // Resume Web Audio Context if suspended by browser policy
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
+  initAudio(); // Safely start audio on user gesture
 
-  // Hide the start screen overlay
   const startScreen = document.getElementById('start-screen');
   if (startScreen) {
     startScreen.style.display = 'none';
   }
 
-  // Load saved state and initialize
   loadGameState();
   checkMilestones();
 }
@@ -179,7 +176,7 @@ function renderHand(hand, elementId, hideFirstCard = false) {
 
   hand.forEach((card, index) => {
     const cardDiv = document.createElement('div');
-    cardDiv.classList.add('card', 'draw-anim'); // Added 'draw-anim' class
+    cardDiv.classList.add('card', 'draw-anim');
     
     if (hideFirstCard && index === 0) {
       cardDiv.classList.add('hidden');
@@ -190,7 +187,6 @@ function renderHand(hand, elementId, hideFirstCard = false) {
       }
       cardDiv.textContent = `${card.rank}${card.suit}`;
     }
-    
     container.appendChild(cardDiv);
   });
 }
