@@ -295,7 +295,7 @@ function doubleDown() {
   }
 }
 
-function splitHand() {
+function handleSplit() {
   if (chips < currentBet) return;
 
   playSound('chip');
