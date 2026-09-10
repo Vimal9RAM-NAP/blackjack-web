@@ -95,8 +95,22 @@ function saveGameState() {
 }
 
 // --- GAME LOGIC ---
-function enterGame() {
-  document.getElementById('start-screen').style.display = 'none';
+function enterGame(event) {
+  // Prevent any default touch/click delays
+  if (event) event.preventDefault();
+
+  // Resume Web Audio Context if suspended by browser policy
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  // Hide the start screen overlay
+  const startScreen = document.getElementById('start-screen');
+  if (startScreen) {
+    startScreen.style.display = 'none';
+  }
+
+  // Load saved state and initialize
   loadGameState();
   checkMilestones();
 }

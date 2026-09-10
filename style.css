@@ -29,6 +29,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 100;
+  pointer-events: auto; /* Ensures button clicks pass through */
 }
 
 .modal {
