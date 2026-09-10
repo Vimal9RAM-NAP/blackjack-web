@@ -1,4 +1,4 @@
-# 🃏 Interactive Web Blackjack
+# 🃏 INTERACTIVE WEB BLACKJACK
 
 An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, and modern Vanilla JavaScript (ES6+). Features full game loop state management, dynamic Ace value adjustment, dealer AI decision-making, and bankroll tracking.
 
@@ -37,6 +37,8 @@ Track your chip balance and climb the ranks from **Rookie** to elite player titl
 - **Responsive UI:** Styled with pure CSS to fit seamlessly across mobile and desktop browsers.
 - **Zero Dependencies:** Lightweight architecture built without external frameworks or heavy build tools.
 
+* **CSS Keyframe Animations:** Smooth visual card slide-in and rotation effects triggered on every hit and deal.
+
 ---
 
 ## 🛠️ Tech Stack & Concepts Applied
@@ -45,6 +47,7 @@ Track your chip balance and climb the ranks from **Rookie** to elite player titl
 | :------------------ | :------------------ | :--------------------------------------------------------------------------------- |
 | **Logic & State**   | Vanilla JavaScript  | ES6 Array methods, Fisher-Yates shuffle algorithm, DOM manipulation, state control |
 | **Structure**       | HTML5               | Semantic markup, structured input controls                                         |
+| **Animations**      | CSS3 Keyframes      | Transform compositions, rotation/scale transitions, dynamic class toggles          |
 | **Audio**           | Web Audio API       | Frequency synthesis, gain control envelopes, real-time audio contexts              |
 | **Styling & Fonts** | CSS3 & Google Fonts | Modern CSS variables, Flexbox layout, Plus Jakarta Sans & Inter typography         |
 | **Hosting**         | GitHub Pages        | Continuous deployment directly from source branch                                  |
