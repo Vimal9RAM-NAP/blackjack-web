@@ -14,7 +14,6 @@ body {
   min-height: 100vh;
 }
 
-/* OVERLAY SCREEN STYLING */
 .overlay {
   position: fixed;
   top: 0;
@@ -69,7 +68,6 @@ body {
   line-height: 1.6;
 }
 
-/* MAIN GAME CONTAINER */
 .game-container {
   background: #1b6330;
   padding: 2rem;
@@ -148,12 +146,17 @@ button {
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
-  margin: 0 5px;
+  margin: 5px;
   transition: 0.2s ease;
 }
 
 button:hover {
   background: #e0a800;
+}
+
+button:disabled {
+  background: #777;
+  cursor: not-allowed;
 }
 
 .primary-btn {

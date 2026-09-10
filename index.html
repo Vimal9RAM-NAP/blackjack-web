@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BLACKJACK | WEB GAME</title>
+  <title>Blackjack | Web Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
   <!-- START OVERLAY SCREEN -->
   <div id="start-screen" class="overlay">
     <div class="modal">
-      <h1>🃏 BLACKJACK</h1>
+      <h1>🃏 Blackjack</h1>
       <p>Test your strategy, hit milestones, and earn elite player titles!</p>
       <div class="milestone-preview">
         <h3>🏆 Milestone Titles:</h3>
@@ -29,7 +29,7 @@
 
   <!-- GAME CONTAINER -->
   <div class="game-container">
-    <h1>BLACKJACK</h1>
+    <h1>Blackjack</h1>
     
     <div class="score-board">
       <div class="title-badge">Title: <span id="player-title">Rookie</span></div>
@@ -43,8 +43,14 @@
       </div>
 
       <div class="hand-section">
-        <h2>Your Hand (<span id="player-score">0</span>)</h2>
+        <h2>Your Hand <span id="active-hand-indicator"></span> (<span id="player-score">0</span>)</h2>
         <div id="player-cards" class="cards-container"></div>
+        
+        <!-- Second Hand Container (Used during Split) -->
+        <div id="split-hand-section" style="display: none; margin-top: 15px;">
+          <h3>Hand 2 (<span id="player-score-2">0</span>)</h3>
+          <div id="player-cards-2" class="cards-container"></div>
+        </div>
       </div>
     </div>
 
@@ -59,6 +65,8 @@
       <div id="game-controls" style="display: none;">
         <button id="hit-btn" onclick="hit()">Hit</button>
         <button id="stand-btn" onclick="stand()">Stand</button>
+        <button id="double-btn" onclick="doubleDown()">Double Down</button>
+        <button id="split-btn" onclick="splitHand()" style="display: none;">Split</button>
       </div>
     </div>
   </div>
