@@ -7,6 +7,40 @@ let dealerHand = [];
 let chips = 1000;
 let currentBet = 0;
 let gameOver = false;
+let currentTitle = "Rookie";
+
+const MILESTONES = [
+  { threshold: 100000, title: "Luck Is My Name" },
+  { threshold: 50000, title: "Unbreakable" },
+  { threshold: 20000, title: "Top Gun" },
+  { threshold: 10000, title: "Pro" },
+  { threshold: 5000, title: "Jack of All Trades" }
+];
+
+function enterGame() {
+  document.getElementById('start-screen').style.display = 'none';
+  checkMilestones();
+}
+
+function checkMilestones() {
+  let earnedTitle = "Rookie";
+  
+  for (let milestone of MILESTONES) {
+    if (chips >= milestone.threshold) {
+      earnedTitle = milestone.title;
+      break;
+    }
+  }
+
+  if (earnedTitle !== currentTitle) {
+    currentTitle = earnedTitle;
+    document.getElementById('player-title').textContent = currentTitle;
+    return true; // Indicates title upgraded
+  }
+  
+  document.getElementById('player-title').textContent = currentTitle;
+  return false;
+}
 
 function createDeck() {
   deck = [];
@@ -15,7 +49,6 @@ function createDeck() {
       deck.push({ suit, rank });
     }
   }
-  // Shuffle
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -117,7 +150,6 @@ function hit() {
 function stand() {
   if (gameOver) return;
 
-  // Dealer plays
   while (calculateScore(dealerHand) < 17) {
     dealerHand.push(deck.pop());
   }
@@ -143,8 +175,14 @@ function stand() {
 
 function endGame(message) {
   gameOver = true;
-  document.getElementById('status-message').textContent = message;
   document.getElementById('chips').textContent = chips;
+  
+  const upgraded = checkMilestones();
+  if (upgraded) {
+    message += ` 🎉 New Title Unlocked: ${currentTitle}!`;
+  }
+
+  document.getElementById('status-message').textContent = message;
   document.getElementById('betting-controls').style.display = 'block';
   document.getElementById('game-controls').style.display = 'none';
 }

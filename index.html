@@ -3,15 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blackjack | Web Game</title>
+  <title>BLACKJACK | WEB GAME</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- START OVERLAY SCREEN -->
+  <div id="start-screen" class="overlay">
+    <div class="modal">
+      <h1>🃏 BLACKJACK</h1>
+      <p>Test your strategy, hit milestones, and earn elite player titles!</p>
+      <div class="milestone-preview">
+        <h3>🏆 Milestone Titles:</h3>
+        <ul>
+          <li><strong>$5,000:</strong> Jack of All Trades</li>
+          <li><strong>$10,000:</strong> Pro</li>
+          <li><strong>$20,000:</strong> Top Gun</li>
+          <li><strong>$50,000:</strong> Unbreakable</li>
+          <li><strong>$100,000:</strong> Luck Is My Name</li>
+        </ul>
+      </div>
+      <button class="primary-btn" onclick="enterGame()">Start Playing</button>
+    </div>
+  </div>
+
+  <!-- GAME CONTAINER -->
   <div class="game-container">
     <h1>BLACKJACK</h1>
     
     <div class="score-board">
-      <p>Chips: $<span id="chips">1000</span></p>
+      <div class="title-badge">Title: <span id="player-title">Rookie</span></div>
+      <div class="chip-count">Chips: $<span id="chips">1000</span></div>
     </div>
 
     <div class="play-area">

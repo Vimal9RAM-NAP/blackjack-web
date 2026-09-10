@@ -6,8 +6,25 @@ An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, a
 
 ---
 
+## 🏆 Tiered Milestone System
+
+Track your chip balance and climb the ranks from **Rookie** to elite player titles as you win rounds and build your bankroll:
+
+| Bankroll Threshold | Player Title Unlocked  |
+| :----------------- | :--------------------- |
+| **$5,000**         | **Jack of All Trades** |
+| **$10,000**        | **Pro**                |
+| **$20,000**        | **Top Gun**            |
+| **$50,000**        | **Unbreakable**        |
+| **$100,000**       | **Luck Is My Name**    |
+
+---
+
+---
+
 ## 🌟 Key Features
 
+- **Landing Modal / Start Screen:** Introduces game rules, objective, and milestone previews before launching into gameplay.
 - **Dynamic Hand Evaluation:** Automatically evaluates hands and handles Ace soft/hard total adjustments (1 vs 11) dynamically.
 - **Dealer AI Logic:** Built-in automated dealer loop that draws cards until reaching a minimum score of 17.
 - **Bankroll & Betting System:** Real-time balance tracking, custom wager inputs, and win/loss/push payout calculations.
@@ -41,12 +58,6 @@ To run this project locally on your machine:
    ```
 3. **Open in browser:**
    Open `index.html` directly in your browser, or use VS Code's Live Server extension.
-
-## 🎯 Next Steps & Planned Enhancements
-
-- Add Split and Double Down betting mechanics.
-- Integrate sound effects for card drawing and chip payouts.
-- Create Roulette CLI / Web simulation as part of a casino suite project.
 
 ## 📄 License
 
