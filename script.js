@@ -6,10 +6,11 @@ let playerHand = [];
 let splitHand = [];
 let dealerHand = [];
 let chips = 1000;
+let highestBankroll = 1000;
 let currentBet = 0;
 let splitBet = 0;
 let isSplit = false;
-let activeHandIndex = 0; // 0 for main hand, 1 for split hand
+let activeHandIndex = 0;
 let gameOver = false;
 let currentTitle = "Rookie";
 
@@ -21,27 +22,108 @@ const MILESTONES = [
   { threshold: 5000, title: "Jack of All Trades" }
 ];
 
+// --- SOUND SYNTHESIZER (Web Audio API) ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  const now = audioCtx.currentTime;
+
+  if (type === 'card') {
+    // Card slide sound (short noise click)
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+    osc.start(now);
+    osc.stop(now + 0.08);
+  } else if (type === 'chip') {
+    // Chip clink sound (high pitch click)
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, now);
+    osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+    osc.start(now);
+    osc.stop(now + 0.05);
+  } else if (type === 'unlock') {
+    // Fanfare chime
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    notes.forEach((freq, index) => {
+      const noteOsc = audioCtx.createOscillator();
+      const noteGain = audioCtx.createGain();
+      noteOsc.connect(noteGain);
+      noteGain.connect(audioCtx.destination);
+      
+      noteOsc.frequency.setValueAtTime(freq, now + index * 0.1);
+      noteGain.gain.setValueAtTime(0.2, now + index * 0.1);
+      noteGain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.1 + 0.3);
+      
+      noteOsc.start(now + index * 0.1);
+      noteOsc.stop(now + index * 0.1 + 0.3);
+    });
+  }
+}
+
+// --- LOCAL STORAGE MANAGER ---
+function loadGameState() {
+  const savedChips = localStorage.getItem('bj_chips');
+  const savedHigh = localStorage.getItem('bj_highest');
+  const savedTitle = localStorage.getItem('bj_title');
+
+  if (savedChips !== null) chips = parseInt(savedChips);
+  if (savedHigh !== null) highestBankroll = parseInt(savedHigh);
+  if (savedTitle !== null) currentTitle = savedTitle;
+
+  document.getElementById('chips').textContent = chips;
+  document.getElementById('player-title').textContent = currentTitle;
+}
+
+function saveGameState() {
+  localStorage.setItem('bj_chips', chips);
+  localStorage.setItem('bj_highest', highestBankroll);
+  localStorage.setItem('bj_title', currentTitle);
+}
+
+// --- GAME LOGIC ---
 function enterGame() {
   document.getElementById('start-screen').style.display = 'none';
+  loadGameState();
   checkMilestones();
 }
 
 function checkMilestones() {
+  if (chips > highestBankroll) {
+    highestBankroll = chips;
+  }
+
   let earnedTitle = "Rookie";
   for (let milestone of MILESTONES) {
-    if (chips >= milestone.threshold) {
+    if (highestBankroll >= milestone.threshold) {
       earnedTitle = milestone.title;
       break;
     }
   }
 
+  let upgraded = false;
   if (earnedTitle !== currentTitle) {
     currentTitle = earnedTitle;
-    document.getElementById('player-title').textContent = currentTitle;
-    return true;
+    upgraded = true;
+    playSound('unlock');
   }
+
   document.getElementById('player-title').textContent = currentTitle;
-  return false;
+  saveGameState();
+  return upgraded;
 }
 
 function createDeck() {
@@ -106,8 +188,10 @@ function startGame() {
     return;
   }
 
+  playSound('chip');
   chips -= currentBet;
   document.getElementById('chips').textContent = chips;
+  saveGameState();
 
   createDeck();
   playerHand = [deck.pop(), deck.pop()];
@@ -118,12 +202,13 @@ function startGame() {
   splitBet = 0;
   gameOver = false;
 
+  playSound('card');
+
   document.getElementById('split-hand-section').style.display = 'none';
   document.getElementById('betting-controls').style.display = 'none';
   document.getElementById('game-controls').style.display = 'block';
   document.getElementById('double-btn').style.display = 'inline-block';
 
-  // Check for Split condition (Matching Ranks)
   if (playerHand[0].rank === playerHand[1].rank && chips >= currentBet) {
     document.getElementById('split-btn').style.display = 'inline-block';
   } else {
@@ -153,6 +238,7 @@ function updateUI(hideDealerCard = false) {
 function hit() {
   if (gameOver) return;
 
+  playSound('card');
   document.getElementById('double-btn').style.display = 'none';
   document.getElementById('split-btn').style.display = 'none';
 
@@ -181,10 +267,12 @@ function doubleDown() {
     return;
   }
 
+  playSound('chip');
   chips -= currentBet;
   currentBet *= 2;
   document.getElementById('chips').textContent = chips;
 
+  playSound('card');
   playerHand.push(deck.pop());
   updateUI(true);
 
@@ -198,11 +286,13 @@ function doubleDown() {
 function splitHand() {
   if (chips < currentBet) return;
 
+  playSound('chip');
   isSplit = true;
   splitBet = currentBet;
   chips -= splitBet;
   document.getElementById('chips').textContent = chips;
 
+  playSound('card');
   splitHand.push(playerHand.pop());
   playerHand.push(deck.pop());
   splitHand.push(deck.pop());
@@ -231,6 +321,7 @@ function stand() {
 function processDealerTurn() {
   while (calculateScore(dealerHand) < 17) {
     dealerHand.push(deck.pop());
+    playSound('card');
   }
 
   const dealerScore = calculateScore(dealerHand);
@@ -239,10 +330,8 @@ function processDealerTurn() {
   let totalPayout = 0;
   let summary = [];
 
-  // Evaluate Hand 1
   totalPayout += evaluateHandScore(playerHand, currentBet, dealerScore, summary, "Hand 1");
 
-  // Evaluate Hand 2 if split
   if (isSplit) {
     totalPayout += evaluateHandScore(splitHand, splitBet, dealerScore, summary, "Hand 2");
   }
@@ -275,8 +364,10 @@ function endGame(message) {
 
   const upgraded = checkMilestones();
   if (upgraded) {
-    message += ` 🎉 New Title: ${currentTitle}!`;
+    message += ` 🎉 New Title Unlocked: ${currentTitle}!`;
   }
+
+  saveGameState();
 
   document.getElementById('status-message').textContent = message;
   document.getElementById('betting-controls').style.display = 'block';
