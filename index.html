@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLACKJACK | WEB GAME</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +26,16 @@
           <li><strong>$100,000:</strong> Luck Is My Name</li>
         </ul>
       </div>
-    <button id="start-btn" class="primary-btn" onclick="enterGame(event)">Start Playing</button>
+      <button id="start-btn" class="primary-btn" onclick="enterGame(event)">Start Playing</button>
+    </div>
+  </div>
+
+  <!-- BROKE OVERLAY SCREEN -->
+  <div id="broke-screen" class="overlay hidden">
+    <div class="modal">
+      <h1>💸 YOU'RE BROKE!</h1>
+      <p>You ran out of chips! Ready to reset and try again?</p>
+      <button id="restart-btn" class="primary-btn" onclick="resetGame()">Start Over</button>
     </div>
   </div>
 

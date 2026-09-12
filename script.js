@@ -112,7 +112,7 @@ function saveGameState() {
   }
 }
 
-// --- START GAME ACTION ---
+// --- START GAME & RESET ACTIONS ---
 function enterGame(event) {
   if (event) event.preventDefault();
 
@@ -128,6 +128,35 @@ function enterGame(event) {
   // 3. Load saved state & milestones
   loadGameState();
   checkMilestones();
+
+  // 4. Check if player was already broke from previous session
+  checkBrokeState();
+}
+
+function checkBrokeState() {
+  if (chips <= 0) {
+    setTimeout(() => {
+      const brokeScreen = document.getElementById('broke-screen');
+      if (brokeScreen) {
+        brokeScreen.classList.remove('hidden');
+      }
+    }, 600);
+  }
+}
+
+function resetGame() {
+  chips = 1000;
+  saveGameState();
+
+  const chipsEl = document.getElementById('chips');
+  if (chipsEl) chipsEl.textContent = chips;
+
+  const brokeScreen = document.getElementById('broke-screen');
+  if (brokeScreen) {
+    brokeScreen.classList.add('hidden');
+  }
+
+  document.getElementById('status-message').textContent = 'Place a bet to start playing!';
 }
 
 function checkMilestones() {
@@ -213,6 +242,11 @@ function renderHand(hand, elementId, hideFirstCard = false) {
 }
 
 function startGame() {
+  if (chips <= 0) {
+    checkBrokeState();
+    return;
+  }
+
   const betInput = document.getElementById('bet-input');
   currentBet = parseInt(betInput.value);
 
@@ -405,6 +439,9 @@ function endGame(message) {
   document.getElementById('status-message').textContent = message;
   document.getElementById('betting-controls').style.display = 'block';
   document.getElementById('game-controls').style.display = 'none';
+
+  // Check if player ran out of chips
+  checkBrokeState();
 }
 
 // Fallback listener attachment on page load

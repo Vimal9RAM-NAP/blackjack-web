@@ -18,6 +18,11 @@ body {
   min-height: 100vh;
 }
 
+/* UTILITY CLASSES */
+.hidden {
+  display: none !important;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -178,6 +183,7 @@ input[type="number"] {
   width: 90px;
   text-align: center;
 }
+
 /* CARD DRAW ANIMATION */
 @keyframes cardSlideIn {
   0% {
