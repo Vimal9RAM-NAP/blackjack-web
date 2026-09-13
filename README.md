@@ -29,7 +29,7 @@ Track your chip balance and climb the ranks from **Rookie** to elite player titl
 | **$5,000**         | **Jack of All Trades** |
 | **$10,000**        | **Pro**                |
 | **$20,000**        | **Top Gun**            |
-| **$5,0000**        | **Unbreakable**        |
+| **$50,0000**       | **Unbreakable**        |
 | **$100,000**       | **Luck Is My Name**    |
 
 ---
