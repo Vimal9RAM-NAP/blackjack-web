@@ -51,7 +51,7 @@ function playSound(type) {
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(300, now);
     osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
-    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.setValueAtTime(0.15, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
     osc.start(now);
     osc.stop(now + 0.08);
@@ -59,7 +59,7 @@ function playSound(type) {
     osc.type = 'sine';
     osc.frequency.setValueAtTime(1200, now);
     osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
-    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.setValueAtTime(0.2, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
     osc.start(now);
     osc.stop(now + 0.05);
@@ -72,7 +72,7 @@ function playSound(type) {
       noteGain.connect(audioCtx.destination);
       
       noteOsc.frequency.setValueAtTime(freq, now + index * 0.1);
-      noteGain.gain.setValueAtTime(0.2, now + index * 0.1);
+      noteGain.gain.setValueAtTime(0.15, now + index * 0.1);
       noteGain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.1 + 0.3);
       
       noteOsc.start(now + index * 0.1);
@@ -116,20 +116,14 @@ function saveGameState() {
 function enterGame(event) {
   if (event) event.preventDefault();
 
-  // 1. Hide modal immediately
   const startScreen = document.getElementById('start-screen');
   if (startScreen) {
     startScreen.style.display = 'none';
   }
 
-  // 2. Initialize sound safely
   initAudio();
-
-  // 3. Load saved state & milestones
   loadGameState();
   checkMilestones();
-
-  // 4. Check if player was already broke from previous session
   checkBrokeState();
 }
 
@@ -273,7 +267,7 @@ function startGame() {
 
   document.getElementById('split-hand-section').style.display = 'none';
   document.getElementById('betting-controls').style.display = 'none';
-  document.getElementById('game-controls').style.display = 'block';
+  document.getElementById('game-controls').style.display = 'flex';
   document.getElementById('double-btn').style.display = 'inline-block';
 
   if (playerHand[0].rank === playerHand[1].rank && chips >= currentBet) {
@@ -293,7 +287,7 @@ function updateUI(hideDealerCard = false) {
   if (isSplit) {
     renderHand(splitHand, 'player-cards-2');
     document.getElementById('player-score-2').textContent = calculateScore(splitHand);
-    document.getElementById('active-hand-indicator').textContent = activeHandIndex === 0 ? '(Playing Hand 1)' : '(Playing Hand 2)';
+    document.getElementById('active-hand-indicator').textContent = activeHandIndex === 0 ? '(Hand 1)' : '(Hand 2)';
   } else {
     document.getElementById('active-hand-indicator').textContent = '';
   }
@@ -437,14 +431,12 @@ function endGame(message) {
   saveGameState();
 
   document.getElementById('status-message').textContent = message;
-  document.getElementById('betting-controls').style.display = 'block';
+  document.getElementById('betting-controls').style.display = 'flex';
   document.getElementById('game-controls').style.display = 'none';
 
-  // Check if player ran out of chips
   checkBrokeState();
 }
 
-// Fallback listener attachment on page load
 document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.querySelector('#start-screen button');
   if (startBtn) {

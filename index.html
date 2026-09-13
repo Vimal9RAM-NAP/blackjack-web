@@ -3,84 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BLACKJACK | WEB GAME</title>
+  <title>High Roller Blackjack</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- START OVERLAY SCREEN -->
+  <!-- START / WELCOME MODAL OVERLAY -->
   <div id="start-screen" class="overlay">
     <div class="modal">
-      <h1>🃏 BLACKJACK</h1>
-      <p>Test your strategy, hit milestones, and earn elite player titles!</p>
+      <div class="modal-badge">CASINO ROYALE</div>
+      <h1>BLACKJACK</h1>
+      <p>Test your luck, manage your bankroll, and climb the ranks from Rookie to Legend.</p>
+
       <div class="milestone-preview">
-        <h3>🏆 Milestone Titles:</h3>
+        <h3>VIP RANK UNLOCKS</h3>
         <ul>
-          <li><strong>$5,000:</strong> Jack of All Trades</li>
-          <li><strong>$10,000:</strong> Pro</li>
-          <li><strong>$20,000:</strong> Top Gun</li>
-          <li><strong>$50,000:</strong> Unbreakable</li>
-          <li><strong>$100,000:</strong> Luck Is My Name</li>
+          <li>Jack of All Trades <span>$5,000</span></li>
+          <li>Pro <span>$10,000</span></li>
+          <li>Top Gun <span>$20,000</span></li>
+          <li>Unbreakable <span>$50,000</span></li>
+          <li>Luck Is My Name <span>$100,000</span></li>
         </ul>
       </div>
-      <button id="start-btn" class="primary-btn" onclick="enterGame(event)">Start Playing</button>
+
+      <button class="primary-btn" onclick="enterGame(event)">ENTER TABLE</button>
     </div>
   </div>
 
-  <!-- BROKE OVERLAY SCREEN -->
+  <!-- BROKE / GAME OVER OVERLAY -->
   <div id="broke-screen" class="overlay hidden">
     <div class="modal">
-      <h1>💸 YOU'RE BROKE!</h1>
-      <p>You ran out of chips! Ready to reset and try again?</p>
-      <button id="restart-btn" class="primary-btn" onclick="resetGame()">Start Over</button>
+      <div class="modal-badge" style="color: #ef4444;">BANKRUPT</div>
+      <h1>OUT OF CHIPS!</h1>
+      <p>The house took it all. Reset your bankroll to get back in the action.</p>
+      <button class="primary-btn" onclick="resetGame()">RELOAD $1,000</button>
     </div>
   </div>
 
-  <!-- GAME CONTAINER -->
+  <!-- MAIN CASINO TABLE CONTAINER -->
   <div class="game-container">
-    <h1>BLACKJACK</h1>
     
-    <div class="score-board">
-      <div class="title-badge">Title: <span id="player-title">Rookie</span></div>
-      <div class="chip-count">Chips: $<span id="chips">1000</span></div>
+    <div class="table-header">
+      <div class="brand">HIGH ROLLER CLUB</div>
+      <div class="table-rules">DEALER STANDS ON 17 • PAYS 1 TO 1</div>
     </div>
 
+    <!-- SCORE BOARD & STATS -->
+    <div class="score-board">
+      <div class="info-pill">
+        <span class="pill-label">RANK</span>
+        <span id="player-title">Rookie</span>
+      </div>
+      <div class="info-pill highlight">
+        <span class="pill-label">BANKROLL</span>
+        <span class="bankroll-val">$<span id="chips">1000</span></span>
+      </div>
+    </div>
+
+    <!-- PLAY AREA (DEALER & PLAYER HANDS) -->
     <div class="play-area">
+      
+      <!-- DEALER HAND -->
       <div class="hand-section">
-        <h2>Dealer's Hand (<span id="dealer-score">?</span>)</h2>
+        <div class="section-header">
+          <span class="section-label">DEALER</span>
+          <div class="score-badge" id="dealer-score">?</div>
+        </div>
         <div id="dealer-cards" class="cards-container"></div>
       </div>
 
+      <!-- PLAYER MAIN HAND -->
       <div class="hand-section">
-        <h2>Your Hand <span id="active-hand-indicator"></span> (<span id="player-score">0</span>)</h2>
-        <div id="player-cards" class="cards-container"></div>
-        
-        <!-- Second Hand Container (Used during Split) -->
-        <div id="split-hand-section" style="display: none; margin-top: 15px;">
-          <h3>Hand 2 (<span id="player-score-2">0</span>)</h3>
-          <div id="player-cards-2" class="cards-container"></div>
+        <div class="section-header">
+          <span class="section-label">PLAYER <span id="active-hand-indicator" class="active-indicator"></span></span>
+          <div class="score-badge" id="player-score">0</div>
         </div>
+        <div id="player-cards" class="cards-container"></div>
       </div>
+
+      <!-- PLAYER SPLIT HAND (HIDDEN BY DEFAULT) -->
+      <div id="split-hand-section" class="hand-section" style="display: none;">
+        <div class="section-header">
+          <span class="section-label">HAND 2</span>
+          <div class="score-badge" id="player-score-2">0</div>
+        </div>
+        <div id="player-cards-2" class="cards-container"></div>
+      </div>
+
     </div>
 
+    <!-- STATUS MESSAGES -->
     <div id="status-message" class="message">Place a bet to start playing!</div>
 
+    <!-- CONTROLS CONTAINER -->
     <div class="controls">
-      <div id="betting-controls">
-        <input type="number" id="bet-input" value="100" min="10" step="10">
-        <button id="deal-btn" onclick="startGame()">Deal Card</button>
-      </div>
       
-      <div id="game-controls" style="display: none;">
-        <button id="hit-btn" onclick="hit()">Hit</button>
-        <button id="stand-btn" onclick="stand()">Stand</button>
-        <button id="double-btn" onclick="doubleDown()">Double Down</button>
-        <button id="split-btn" onclick="handleSplit()">Split</button>
+      <!-- BETTING CONTROLS (DEAL SCREEN) -->
+      <div id="betting-controls" class="controls-group">
+        <div class="bet-input-wrapper">
+          <label for="bet-input">BET AMOUNT</label>
+          <input type="number" id="bet-input" value="50" min="10" step="10">
+        </div>
+
+        <div class="chip-selector">
+          <button class="casino-chip chip-10" onclick="document.getElementById('bet-input').value = 10">+10</button>
+          <button class="casino-chip chip-50" onclick="document.getElementById('bet-input').value = 50">+50</button>
+          <button class="casino-chip chip-100" onclick="document.getElementById('bet-input').value = 100">+100</button>
+          <button class="casino-chip chip-500" onclick="document.getElementById('bet-input').value = 500">+500</button>
+        </div>
+
+        <button class="action-btn deal-action" onclick="startGame()">DEAL</button>
       </div>
+
+      <!-- GAMEPLAY ACTION CONTROLS (IN-GAME) -->
+      <div id="game-controls" class="controls-group" style="display: none;">
+        <button class="action-btn hit-action" onclick="hit()">HIT</button>
+        <button class="action-btn stand-action" onclick="stand()">STAND</button>
+        <button id="double-btn" class="action-btn double-action" onclick="doubleDown()">DOUBLE</button>
+        <button id="split-btn" class="action-btn split-action" onclick="handleSplit()" style="display: none;">SPLIT</button>
+      </div>
+
     </div>
+
   </div>
 
   <script src="script.js"></script>
