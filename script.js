@@ -436,7 +436,6 @@ function endGame(message) {
 
   checkBrokeState();
 }
-
 document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.querySelector('#start-screen button');
   if (startBtn) {
