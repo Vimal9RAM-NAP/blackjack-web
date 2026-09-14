@@ -1,6 +1,6 @@
 # 🃏 INTERACTIVE WEB BLACKJACK : HIGH ROLLER BLACKJACK
 
-![High Roller Blackjack](screenshots/linkedin-thumbnail.png)
+![High Roller Blackjack](screenshots/high_roller_blackjack.png)
 
 An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, and modern Vanilla JavaScript (ES6+). Features full game loop state management, dynamic Ace value adjustment, dealer AI decision-making, synthesized Web Audio API sound effects, local storage persistence, and an achievement milestone system.
 
