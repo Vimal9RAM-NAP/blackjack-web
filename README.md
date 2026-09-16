@@ -6,6 +6,13 @@ An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, a
 
 🎮 **[Play Live Demo Here](https://Vimal9RAM-NAP.github.io/blackjack-web/)**
 
+## 🎮 Play My Game (Itch.io)
+
+<a href="https://itch.io/embed-upload/19240812?color=333333" target="_blank">
+  <img src="https://img.shields.io/badge/▶%20PLAY%20GAME-FAFAFA?style=for-the-badge&logo=itch.io&logoColor=FAFAFA&labelColor=222222" alt="Play Game">
+</a>
+
+
 ---
 
 ## 🌟 Key Features
