@@ -1,4 +1,4 @@
-# 🃏 INTERACTIVE WEB BLACKJACK : HIGH ROLLER BLACKJACK
+#  INTERACTIVE WEB BLACKJACK : HIGH ROLLER BLACKJACK
 
 ![High Roller Blackjack](screenshots/high_roller_blackjack.png)
 
@@ -6,7 +6,7 @@ An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, a
 
 🎮 **[Play Live Demo Here](https://Vimal9RAM-NAP.github.io/blackjack-web/)**
 
-## 🎮 Play My Game (Itch.io)
+##  Play My Game (Itch.io)
 
 <a href="https://itch.io/embed-upload/19240812?color=333333" target="_blank">
   <img src="https://img.shields.io/badge/▶%20PLAY%20GAME-FAFAFA?style=for-the-badge&logo=itch.io&logoColor=FAFAFA&labelColor=222222" alt="Play Game">
@@ -15,7 +15,7 @@ An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, a
 
 ---
 
-## 🌟 Key Features
+##  Key Features
 
 - **Landing Modal / Start Screen:** Introduces game rules, objectives, and milestone previews before launching into gameplay.
 - **Dynamic Hand Evaluation:** Automatically evaluates hands and handles Ace soft/hard total adjustments (1 vs 11) dynamically.
@@ -29,7 +29,7 @@ An interactive, browser-based Blackjack game engineered with pure HTML5, CSS3, a
 
 ---
 
-## 🏆 Tiered Milestone System
+##  Tiered Milestone System
 
 Track your chip balance and climb the ranks from **Rookie** to elite player titles as you win rounds and build your bankroll:
 
@@ -43,7 +43,7 @@ Track your chip balance and climb the ranks from **Rookie** to elite player titl
 
 ---
 
-## 🛠️ Tech Stack & Concepts Applied
+##  Tech Stack & Concepts Applied
 
 | Component            | Technology          | Core Concepts Demonstrated                                                         |
 | :------------------- | :------------------ | :--------------------------------------------------------------------------------- |
@@ -57,7 +57,7 @@ Track your chip balance and climb the ranks from **Rookie** to elite player titl
 
 ---
 
-## 🚀 Local Setup & Installation
+##  Local Setup & Installation
 
 To run this project locally on your machine:
 
@@ -72,6 +72,6 @@ To run this project locally on your machine:
 3. **Open in browser:**
    Open `index.html` directly in your browser, or use VS Code's Live Server extension.
 
-## 📄 License
+##  License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the `MIT License`.
